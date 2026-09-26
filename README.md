@@ -1,129 +1,226 @@
-16-bit 5-Stage Pipelined RISC Processor
+# 16-bit 5-Stage Pipelined RISC Processor
 
-A custom 16-bit RISC Processor designed and implemented in Verilog HDL featuring a classic 5-stage instruction pipeline. The processor supports arithmetic, logical, memory, and branch operations while incorporating hazard detection and forwarding mechanisms to improve pipeline efficiency.
+A custom **16-bit RISC Processor** designed and implemented in **Verilog HDL** featuring a classic **5-stage pipeline architecture**. The processor supports arithmetic, logical, memory, and branch instructions while incorporating hazard detection and forwarding mechanisms to improve execution efficiency.
 
-Overview
+---
+
+## 📌 Project Overview
 
 This project implements a pipelined RISC architecture consisting of the following stages:
 
-Instruction Fetch (IF)
-Instruction Decode (ID)
-Execute (EX)
-Memory Access (MEM)
-Write Back (WB)
+1. **Instruction Fetch (IF)**
+2. **Instruction Decode (ID)**
+3. **Execute (EX)**
+4. **Memory Access (MEM)**
+5. **Write Back (WB)**
 
-The design follows a modular RTL approach, making it suitable for simulation, verification, and FPGA implementation.
+The design follows a modular RTL approach and is compatible with FPGA development workflows using Xilinx toolchains.
 
-Features
-16-bit custom RISC architecture
-5-stage pipelined datapath
-Arithmetic and logical operations through ALU
-General-purpose register file
-Separate instruction and data memory modules
-Centralized control unit for instruction decoding
-Data hazard handling using:
-Operand forwarding
-Pipeline stalling
-Hazard detection logic
-Control hazard mitigation using branch flush mechanisms
-Modular and reusable RTL design
-Compatible with Xilinx FPGA development tools
-Architecture
-                +----------------+
-                | Instruction Mem|
-                +-------+--------+
-                        |
-                        v
-+------+    +------+    +------+    +------+    +------+
-|  IF  | -> |  ID  | -> |  EX  | -> | MEM  | -> |  WB  |
-+------+    +------+    +------+    +------+    +------+
-                |            ^
-                |            |
-        +-------+----+  +----+--------+
-        | Register   |  | Forwarding  |
-        | File       |  | Unit        |
-        +------------+  +-------------+
-                |
-        +-------+--------+
-        | Hazard Detect  |
-        | Unit           |
-        +----------------+
-Implemented Modules
-Datapath Components
-Program Counter (PC)
-Instruction Memory
-Register File
-Arithmetic Logic Unit (ALU)
-Data Memory
-Pipeline Registers
-Control Components
-Main Control Unit
-ALU Control Unit
-Hazard Detection Unit
-Forwarding Unit
-Branch Control Logic
-Hazard Handling
-Data Hazards
+---
 
-Resolved using:
+## ✨ Features
 
-EX-to-EX forwarding
-MEM-to-EX forwarding
-Pipeline stalling when forwarding is insufficient
-Control Hazards
+- 16-bit custom RISC instruction set architecture
+- Five-stage instruction pipeline (IF, ID, EX, MEM, WB)
+- Modular Verilog HDL implementation
+- Arithmetic and Logical Unit (ALU)
+- General-purpose Register File
+- Instruction and Data Memory modules
+- Control Unit for instruction decoding
+- Hazard Detection Unit
+- Operand Forwarding Unit
+- Pipeline stalling for load-use hazards
+- Branch flush mechanism for control hazards
+- Simulation-based verification using testbenches
+- FPGA-ready RTL design
 
-Resolved using:
+---
 
-Branch detection
-Pipeline flushing of incorrect instructions
-Verification
+## 🏗️ Processor Architecture
 
-Simulation-based verification was performed using comprehensive testbenches covering:
+```text
+                +----------------------+
+                |  Instruction Memory  |
+                +----------+-----------+
+                           |
+                           v
 
-Arithmetic operations
-Logical operations
-Load/Store instructions
-Branch instructions
-Data hazard scenarios
-Pipeline stalls
-Forwarding paths
-Branch flush behavior
-Tools Used
-Verilog HDL
-Xilinx Vivado / ISE
-ModelSim / Vivado Simulator
-Project Structure
++-------+    +-------+    +-------+    +-------+    +-------+
+|  IF   | -> |  ID   | -> |  EX   | -> | MEM   | -> |  WB   |
++-------+    +-------+    +-------+    +-------+    +-------+
+                 |             ^
+                 |             |
+                 v             |
+         +---------------+     |
+         | Register File |-----+
+         +---------------+
+
+                 |
+                 v
+       +-------------------+
+       | Hazard Detection  |
+       +-------------------+
+
+                 |
+                 v
+       +-------------------+
+       | Forwarding Unit   |
+       +-------------------+
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+16bit-pipelined-risc/
+│
 ├── rtl/
+│   ├── processor_top.v
 │   ├── alu.v
 │   ├── register_file.v
+│   ├── instruction_memory.v
+│   ├── data_memory.v
 │   ├── control_unit.v
 │   ├── forwarding_unit.v
 │   ├── hazard_detection.v
-│   ├── instruction_memory.v
-│   ├── data_memory.v
-│   └── processor_top.v
+│   └── pipeline_registers.v
 │
 ├── testbench/
-│   ├── processor_tb.v
-│   └── memory_tb.v
+│   └── processor_tb.v
 │
 ├── simulation/
-│   ├── waveforms
-│   └── outputs
+│   ├── waveforms/
+│   └── results/
 │
+├── docs/
+│   └── architecture.pdf
+│
+├── LICENSE
 └── README.md
-Future Enhancements
-Interrupt and exception handling
-Cache memory integration
-Branch prediction techniques
-Extended instruction set support
-FPGA hardware validation and performance analysis
-Learning Outcomes
+```
 
-This project provided practical experience in:
+---
 
-Computer architecture and pipelining
-RTL design using Verilog HDL
-Hazard detection and resolution techniques
-Digital system verification
-FPGA-oriented hardware development
+## 🔧 Implemented Modules
+
+### Datapath Components
+
+- Program Counter (PC)
+- Instruction Memory
+- Register File
+- ALU
+- Data Memory
+- Pipeline Registers
+
+### Control Components
+
+- Main Control Unit
+- ALU Control Unit
+- Hazard Detection Unit
+- Forwarding Unit
+- Branch Control Logic
+
+---
+
+## ⚠️ Hazard Handling
+
+### Data Hazards
+
+Implemented using:
+
+- EX-to-EX Forwarding
+- MEM-to-EX Forwarding
+- Pipeline Stall Logic
+- Load-Use Hazard Detection
+
+### Control Hazards
+
+Implemented using:
+
+- Branch Decision Logic
+- Pipeline Flush Mechanism
+
+---
+
+## 🧪 Verification
+
+The processor was verified through simulation testbenches covering:
+
+- Arithmetic Instructions
+- Logical Instructions
+- Register Operations
+- Load and Store Instructions
+- Branch Instructions
+- Data Hazard Scenarios
+- Forwarding Paths
+- Pipeline Stalls
+- Branch Flush Operations
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Xilinx Vivado / ISE
+- ModelSim (optional)
+- Verilog HDL Simulator
+
+### Run Simulation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/16bit-pipelined-risc.git
+cd 16bit-pipelined-risc
+```
+
+2. Open the project in Vivado or ModelSim.
+
+3. Compile all RTL modules and the testbench.
+
+4. Run simulation:
+
+```bash
+run -all
+```
+
+5. Observe waveform outputs and verify pipeline behavior.
+
+---
+
+## 📈 Future Enhancements
+
+- Interrupt Handling
+- Exception Support
+- Branch Prediction
+- Cache Memory Integration
+- Multi-cycle Operations
+- FPGA Hardware Validation
+
+---
+
+## 🛠️ Tools & Technologies
+
+- Verilog HDL
+- Xilinx Vivado
+- ModelSim
+- Digital Design
+- Computer Architecture
+- FPGA Design Flow
+
+---
+
+## 👩‍💻 Author
+
+**Shrawani Wagh**
+
+Electronics & Telecommunication Engineering  
+Cummins College of Engineering for Women, Pune
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
